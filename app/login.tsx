@@ -1,3 +1,5 @@
+import { getApiErrorMessage } from "@/src/services/api";
+import { router } from "expo-router";
 import { Formik } from "formik";
 import { useState } from "react";
 import {
@@ -8,8 +10,8 @@ import {
   View,
 } from "react-native";
 import * as Yup from "yup";
-
 import { useAuth } from "../src/auth/AuthContext";
+import { login } from "../src/services/classFeed";
 
 const Schema = Yup.object({
   username: Yup.string()
@@ -35,8 +37,25 @@ export default function LoginScreen() {
         initialValues={{ username: "" }}
         validationSchema={Schema}
         onSubmit={async (values, helpers) => {
-          // TODO: Call the api to log the user in (using the service function), sign in the user in the auth context,
-          // and redirect the user to the feed (plus nice error handling and submitting logic)
+          try {
+            setApiError(null); // Clear previous errors.
+
+            // Call the service function.
+            const data = await login(values.username);
+
+            // Sign the user into the context (sets token and user).
+            await signIn(data.token, data.user);
+
+            // Redirect to the feed.
+            router.replace("/(app)/feed");
+          } catch (err) {
+            // Handle errors using helper function.
+            const msg = getApiErrorMessage(err);
+            setApiError(msg);
+          } finally {
+            // Tell Formik we are done loading.
+            helpers.setSubmitting(false);
+          }
         }}
       >
         {({
