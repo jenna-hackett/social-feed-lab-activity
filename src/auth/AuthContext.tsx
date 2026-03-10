@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import api from "../services/api";
 import type { User } from "../types";
 
 type AuthState = {
@@ -14,8 +15,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
-  // TODO: Make useEffect that sets the default Authorization header on the axios api instance whenever the token changes
-  // hint: set api.defaults.headers.common.Authorization
+  // Set the Authorization header for all API requests
+  if (token) {
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  } else {
+    delete api.defaults.headers.common["Authorization"];
+  }
 
   async function signIn(newToken: string, newUser: User) {
     setToken(newToken);
