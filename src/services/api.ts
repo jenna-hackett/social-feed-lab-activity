@@ -1,6 +1,13 @@
 import axios from "axios";
 
-// TODO: create reusable axios api instance which uses the BASE_URL from config.ts
+const api = axios.create({
+  baseURL: "http://api.aegisai.xyz",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export default api;
 
 // helper function to get error message from api responses
 export function getApiErrorMessage(err: unknown): string {
