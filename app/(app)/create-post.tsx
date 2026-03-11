@@ -27,7 +27,6 @@ export default function CreatePostScreen() {
         initialValues={{ text: "" }}
         validationSchema={Schema}
         onSubmit={async (values, { setSubmitting }) => {
-          // TODO: ensure the token exists, create the post using the values, redirect the user and handle errors and submitting
           if (!token) {
             setApiError("You must be logged in to create a post.");
             return;
