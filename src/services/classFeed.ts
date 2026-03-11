@@ -11,17 +11,12 @@ export async function login(username: string) {
 }
 
 // Get Feed function that retrieves the list of posts from the server. For now, it returns a static list of posts as a placeholder.
-export async function getFeed() {
-  return [
-    {
-      id: "p1",
-      author: "system",
-      text: "The server is currently offline. This is a mock post!",
-      createdAt: Date.now(),
-      commentCount: 0,
-      comments: [],
-    },
-  ];
+export async function getFeed(authors?: string) {
+  const response = await api.get("/feed", {
+    // This passes the authors to the API as a query parameter: /feed?authors=...
+    params: authors ? { authors } : {},
+  });
+  return response.data.posts;
 }
 
 // Create Post function that takes the text of the post and sends it to the server to create a new post.

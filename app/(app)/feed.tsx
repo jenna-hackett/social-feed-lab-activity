@@ -12,6 +12,8 @@ import {
 
 import { useAuth } from "../../src/auth/AuthContext";
 import { PostCard } from "../../src/components/PostCard";
+import { getApiErrorMessage } from "../../src/services/api";
+import { getFeed } from "../../src/services/classFeed";
 import type { Post } from "../../src/types";
 
 function parseAuthors(input: string): string[] | undefined {
@@ -37,11 +39,34 @@ export default function FeedScreen() {
   const [error, setError] = useState<string | null>(null);
 
   const handleAuthorsInput = (text: string) => {
-    // TODO: handle author filter input with debouncing using authorsInputTimeout
+    if (authorsInputTimeout) {
+      clearTimeout(authorsInputTimeout);
+    }
+
+    // Set a new timeout to update the authorsInput state after the user stops typing for 500ms
+    const timeout = setTimeout(() => {
+      setAuthorsInput(text);
+    }, 500);
+
+    // Keep track of the timeout so we can clear it if the user types again before it triggers
+    setAuthorsInputTimeout(timeout as unknown as number);
   };
 
   async function loadFeed() {
-    // TODO: ensure token exists, get feed and set posts, and handle loading and errors
+    if (!token) return;
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const feedData = await getFeed(authors?.join(","));
+
+      setPosts(feedData);
+    } catch (err) {
+      setError(getApiErrorMessage(err));
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
