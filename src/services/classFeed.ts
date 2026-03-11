@@ -1,18 +1,28 @@
 import api from "./api";
 
 // Login function that takes a username and returns the user data from the server.
-export const login = async (username: string) => {
-  const response = await api.post("/login", { username });
-  return response.data;
-};
+export async function login(username: string) {
+  // Simulates a 1-second delay then returns success
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return {
+    token: "fake_token_123",
+    user: { username },
+  };
+}
 
-// Get Feed function that takes an optional array of authors and returns the feed data from the server.
-export const getFeed = async (authors?: string[]) => {
-  const response = await api.get("/feed", {
-    params: authors ? { authors } : {},
-  });
-  return response.data;
-};
+// Get Feed function that retrieves the list of posts from the server. For now, it returns a static list of posts as a placeholder.
+export async function getFeed() {
+  return [
+    {
+      id: "p1",
+      author: "system",
+      text: "The server is currently offline. This is a mock post!",
+      createdAt: Date.now(),
+      commentCount: 0,
+      comments: [],
+    },
+  ];
+}
 
 // Create Post function that takes the text of the post and sends it to the server to create a new post.
 export async function createPost(text: string) {
