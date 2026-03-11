@@ -9,6 +9,43 @@ export async function login(username: string) {
 }
 
 // Get Feed function that retrieves the list of posts from the server. For now, it returns a static list of posts as a placeholder.
+
+// MOCK DATA
+let MOCK_POSTS = [
+  {
+    id: "1",
+    author: "Local_Test",
+    text: "This is a sample post from the feed.",
+    createdAt: Date.now(),
+    commentCount: 0,
+    comments: [],
+  },
+  {
+    id: "2",
+    author: "Local_Test",
+    text: "This is a second sample post from the feed.",
+    createdAt: Date.now(),
+    commentCount: 0,
+    comments: [],
+  },
+  {
+    id: "3",
+    author: "Local_Test",
+    text: "This is a third sample post from the feed.",
+    createdAt: Date.now(),
+    commentCount: 0,
+    comments: [],
+  },
+  {
+    id: "4",
+    author: "Local_Test",
+    text: "This is a fourth sample post from the feed.",
+    createdAt: Date.now(),
+    commentCount: 0,
+    comments: [],
+  },
+];
+
 export async function getFeed(authors?: string) {
   // COMMENTED OUT BECAUSE SERVER IS DOWN FOR API.
   //const response = await api.get("/feed", {
@@ -18,40 +55,7 @@ export async function getFeed(authors?: string) {
   //return response.data.posts;
 
   // MOCK DATA TO ALLOW APP TO FUNCTION WITHOUT API
-  return [
-    {
-      id: "1",
-      author: "Local_Test",
-      text: "This is a sample post from the feed.",
-      createdAt: Date.now(),
-      commentCount: 0,
-      comments: [],
-    },
-    {
-      id: "2",
-      author: "Local_Test",
-      text: "This is a second sample post from the feed.",
-      createdAt: Date.now(),
-      commentCount: 0,
-      comments: [],
-    },
-    {
-      id: "3",
-      author: "Local_Test",
-      text: "This is a third sample post from the feed.",
-      createdAt: Date.now(),
-      commentCount: 0,
-      comments: [],
-    },
-    {
-      id: "4",
-      author: "Local_Test",
-      text: "This is a fourth sample post from the feed.",
-      createdAt: Date.now(),
-      commentCount: 0,
-      comments: [],
-    },
-  ];
+  return MOCK_POSTS;
 }
 
 // Create Post function that takes the text of the post and sends it to the server to create a new post.
@@ -62,14 +66,18 @@ export async function createPost(text: string) {
 
   // MOCK FUNCTION TO SIMULATE CREATING A POST WITHOUT API
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  return {
-    id: Math.random().toString(36), // generate a random ID
-    author: "you",
+  const newPost = {
+    id: Math.random().toString(36),
+    author: "Me",
     text: text,
     createdAt: Date.now(),
     commentCount: 0,
     comments: [],
   };
+
+  MOCK_POSTS = [newPost, ...MOCK_POSTS]; // add the new post to the top of the feed
+
+  return { post: newPost };
 }
 
 // Create Comment function that takes the post ID and the text of the comment and sends it to the server to create a new comment on the specified post.
