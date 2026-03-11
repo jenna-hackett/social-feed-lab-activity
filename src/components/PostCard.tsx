@@ -36,7 +36,7 @@ export function PostCard({
       setError(null);
 
       // call the service function to create the comment and wait for it to finish
-      await createComment(post.id, cleanedText);
+      await createComment(post.id, commentText);
       // clear input field.
       setCommentText("");
       // refresh comments in the parent feed screen.
